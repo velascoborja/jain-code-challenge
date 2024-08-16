@@ -12,6 +12,7 @@ hilt = "2.49"
 retrofit = "2.11.0"
 coroutines = "1.7.3"
 composeRuntime = "1.6.8"
+coil = "2.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +36,8 @@ convertor-gson = { group = "com.squareup.retrofit2", name = "converter-gson", ve
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 livedata-compose = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "composeRuntime" }
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

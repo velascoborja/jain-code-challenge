@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.coroutines)
     implementation(libs.viewmodel.compose)
     implementation(libs.livedata.compose)
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

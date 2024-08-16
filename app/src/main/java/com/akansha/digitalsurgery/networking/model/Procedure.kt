@@ -1,4 +1,4 @@
-package com.akansha.digitalsurgery.model
+package com.akansha.digitalsurgery.networking.model
 
 import com.google.gson.annotations.SerializedName
 

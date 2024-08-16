@@ -1,6 +1,6 @@
 package com.akansha.digitalsurgery.networking
 
-import com.akansha.digitalsurgery.model.Procedure
+import com.akansha.digitalsurgery.networking.model.Procedure
 import retrofit2.Response
 import retrofit2.http.GET
 

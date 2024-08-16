@@ -56,3 +56,7 @@ fun DigitalSurgeryTheme(
         content = content
     )
 }
+
+object DigitalSurgeryTheme {
+    val spacings = Spacings
+}
