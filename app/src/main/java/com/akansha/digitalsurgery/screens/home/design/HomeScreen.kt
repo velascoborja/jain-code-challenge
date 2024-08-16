@@ -5,12 +5,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,7 +31,11 @@ fun HomeScreen(viewModel: ProcedureViewModel = viewModel()) {
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = { TopAppBar(title = { Text(text = APP_NAME) }) }
     ) { innerPadding ->
+
         val procedures = viewModel.procedureLiveData.observeAsState()
+
+        val sheetState = rememberModalBottomSheetState()
+        var showBottomSheet by remember { mutableStateOf(false) }
 
         LaunchedEffect(key1 = Unit) {
             viewModel.getProcedures()
@@ -34,9 +44,16 @@ fun HomeScreen(viewModel: ProcedureViewModel = viewModel()) {
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             if (procedures.value is Result.Success) {
                 items((procedures.value as Result.Success).procedures) {
-                    ProcedureListItem(it)
+                    ProcedureListItem(it, onItemClick = { showBottomSheet = true })
                 }
             }
+        }
+
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = { showBottomSheet = false },
+                sheetState = sheetState
+            ) {}
         }
     }
 }

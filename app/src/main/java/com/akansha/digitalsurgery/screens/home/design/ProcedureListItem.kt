@@ -1,6 +1,7 @@
 package com.akansha.digitalsurgery.screens.home.design
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,7 +26,7 @@ import com.akansha.digitalsurgery.ui.theme.DigitalSurgeryTheme.spacings
 
 
 @Composable
-fun ProcedureListItem(procedure: ProcedureItem) {
+fun ProcedureListItem(procedure: ProcedureItem, onItemClick: (String) -> Unit) {
     Row(
         modifier = Modifier
             .padding(
@@ -36,6 +37,7 @@ fun ProcedureListItem(procedure: ProcedureItem) {
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .fillMaxWidth()
             .height(PROCEDURE_ITEM_HEIGHT.dp)
+            .clickable { onItemClick(procedure.id) }
     ) {
         AsyncImage(
             model = procedure.imageUrl,
