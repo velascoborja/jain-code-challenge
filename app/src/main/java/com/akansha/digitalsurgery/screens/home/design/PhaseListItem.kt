@@ -1,11 +1,9 @@
 package com.akansha.digitalsurgery.screens.home.design
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -15,28 +13,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.akansha.digitalsurgery.Constants.IMAGE_WIDTH
-import com.akansha.digitalsurgery.Constants.PHASE_COUNT_LABEL
-import com.akansha.digitalsurgery.Constants.PROCEDURE_ITEM_HEIGHT
-import com.akansha.digitalsurgery.model.ProcedureItem
+import com.akansha.digitalsurgery.Constants.PHASE_ITEM_HEIGHT
+import com.akansha.digitalsurgery.Constants.PHASE_ITEM_WIDTH
+import com.akansha.digitalsurgery.model.PhaseDetailCard
 import com.akansha.digitalsurgery.ui.theme.DigitalSurgeryTheme.spacings
 
-
 @Composable
-fun ProcedureListItem(procedure: ProcedureItem, onItemClick: (String) -> Unit) {
+fun PhaseListItem(phase: PhaseDetailCard) {
     Row(
         modifier = Modifier
-            .padding(top = spacings.s)
+            .padding(end = spacings.s)
             .background(MaterialTheme.colorScheme.surfaceVariant)
-            .fillMaxWidth()
-            .height(PROCEDURE_ITEM_HEIGHT.dp)
-            .clickable { onItemClick(procedure.id) }
+            .width(PHASE_ITEM_WIDTH.dp)
+            .height(PHASE_ITEM_HEIGHT.dp)
     ) {
         AsyncImage(
-            model = procedure.imageUrl,
+            model = phase.imageUrl,
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.width(IMAGE_WIDTH.dp)
@@ -44,15 +39,8 @@ fun ProcedureListItem(procedure: ProcedureItem, onItemClick: (String) -> Unit) {
         Spacer(modifier = Modifier.width(spacings.s))
         Column(modifier = Modifier.align(Alignment.CenterVertically)) {
             Text(
-                text = procedure.title,
+                text = phase.name,
                 style = MaterialTheme.typography.titleMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Spacer(modifier = Modifier.height(spacings.s))
-            Text(
-                text = "$PHASE_COUNT_LABEL ${procedure.phaseCount}",
-                style = MaterialTheme.typography.bodyMedium
             )
         }
     }

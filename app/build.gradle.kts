@@ -70,6 +70,8 @@ dependencies {
     implementation(libs.livedata.compose)
     implementation(libs.coil)
     implementation(libs.coil.compose)
+    implementation(libs.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
