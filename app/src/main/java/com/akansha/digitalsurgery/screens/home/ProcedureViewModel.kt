@@ -46,4 +46,6 @@ class ProcedureViewModel @Inject constructor(private val repository: IProcedureR
             } ?: ProcedureDetailCard()
         }
     }
+
+    fun onFavouriteStateUpdate(procedureId: String, state: Boolean) {}
 }

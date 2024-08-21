@@ -24,12 +24,14 @@ fun List<Procedure>.map(): List<ProcedureItem> {
 @RequiresApi(Build.VERSION_CODES.O)
 fun ProcedureDetail.map(): ProcedureDetailCard {
     return ProcedureDetailCard(
-        cardImageUrl = this.card.url,
-        title = this.title,
-        duration = this.duration.toMinutes(),
-        creationDate = this.creationDate.format(),
-        phases = this.phases.map {
+        id = id,
+        cardImageUrl = card.url,
+        title = title,
+        duration = duration.toMinutes(),
+        creationDate = creationDate.format(),
+        phases = phases.map {
             PhaseDetailCard(
+                procedureId = id,
                 imageUrl = it.image.url,
                 name = it.name
             )

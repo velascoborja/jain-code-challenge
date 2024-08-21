@@ -10,7 +10,7 @@ fun Long.toMinutes(): Int = (this / SECONDS_IN_ONE_MINUTE).toInt()
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun String.format(): String {
-    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss[.SSSSSS]")
     val date: LocalDateTime = LocalDateTime.parse(this, inputFormatter)
     val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     return date.format(outputFormatter)

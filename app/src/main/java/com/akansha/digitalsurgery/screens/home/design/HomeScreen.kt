@@ -49,10 +49,18 @@ fun HomeScreen() {
 
             LazyColumn(modifier = Modifier.padding(Spacings.s)) {
                 items(procedures.value) { item ->
-                    ProcedureListItem(procedure = item, onItemClick = {
-                        clickedItemId = it
-                        showBottomSheet = true
-                    })
+                    ProcedureListItem(
+                        procedure = item, onItemClick = {
+                            clickedItemId = it
+                            showBottomSheet = true
+                        },
+                        onFavouriteStateUpdate = { procedureId, state ->
+                            viewModel.onFavouriteStateUpdate(
+                                procedureId,
+                                state
+                            )
+                        }
+                    )
                 }
             }
 
