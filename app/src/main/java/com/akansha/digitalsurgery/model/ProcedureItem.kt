@@ -10,4 +10,5 @@ data class ProcedureItem(
     @ColumnInfo(name = "image_url") val imageUrl: String,
     @ColumnInfo val title: String,
     @ColumnInfo(name = "phase_count") val phaseCount: Int,
+    @ColumnInfo var isFavourite: Boolean = false,
 )

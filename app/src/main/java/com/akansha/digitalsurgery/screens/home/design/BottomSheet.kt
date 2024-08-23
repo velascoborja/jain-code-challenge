@@ -15,7 +15,10 @@ import com.akansha.digitalsurgery.screens.home.ProcedureViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheet(onDismissRequest: () -> Unit) {
+fun BottomSheet(
+    onDismissRequest: () -> Unit,
+    onFavouriteStateUpdate: (ProcedureDetailCard, Boolean) -> Unit
+) {
     val viewModel = hiltViewModel<ProcedureViewModel>()
     val procedureDetail: ProcedureDetailCard? by viewModel.procedureDetailLiveData.observeAsState()
 
@@ -24,7 +27,7 @@ fun BottomSheet(onDismissRequest: () -> Unit) {
             onDismissRequest = onDismissRequest,
         ) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
-                ProcedureDetailView(detail = it)
+                ProcedureDetailView(detail = it, onFavouriteStateUpdate = onFavouriteStateUpdate)
             }
         }
     }

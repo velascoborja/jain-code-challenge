@@ -1,4 +1,4 @@
-package com.akansha.digitalsurgery.screens.home.design
+package com.akansha.digitalsurgery.screens.favourites.design
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -14,32 +14,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.akansha.digitalsurgery.screens.home.ProcedureViewModel
+import com.akansha.digitalsurgery.screens.home.design.BottomSheet
+import com.akansha.digitalsurgery.screens.home.design.ProcedureListItem
 import com.akansha.digitalsurgery.screens.home.model.DigitalSurgeryScreen
 import com.akansha.digitalsurgery.screens.home.model.FavouriteState
 import com.akansha.digitalsurgery.ui.theme.Spacings
 
-
 @Composable
-fun HomeScreen(showSnackBar: (String, FavouriteState) -> Unit) {
+fun FavouritesScreen(showSnackBar: (String, FavouriteState) -> Unit) {
     Column {
         val viewModel = hiltViewModel<ProcedureViewModel>()
-        val procedures = viewModel.procedureLiveData.observeAsState(emptyList())
-        val favorites = viewModel.favouritesLiveData.observeAsState()
+        val favourites = viewModel.favouritesLiveData.observeAsState(emptyList())
+
         var showBottomSheet by remember { mutableStateOf(false) }
         var clickedItemId by remember { mutableStateOf("") }
 
         LaunchedEffect(key1 = Unit) {
-            viewModel.getProcedures()
+            viewModel.getFavourites()
         }
 
-        LaunchedEffect(key1 = clickedItemId, key2 = favorites.value) {
+        LaunchedEffect(key1 = clickedItemId) {
             if (clickedItemId.isNotEmpty()) {
                 viewModel.getProcedureDetails(clickedItemId)
             }
         }
 
         LazyColumn(modifier = Modifier.padding(Spacings.s)) {
-            items(procedures.value, key = { it.id }) { item ->
+            items(favourites.value) { item ->
                 ProcedureListItem(
                     procedure = item, onItemClick = {
                         clickedItemId = it
@@ -47,7 +48,6 @@ fun HomeScreen(showSnackBar: (String, FavouriteState) -> Unit) {
                     },
                     onFavouriteStateUpdate = { procedure, isFavourite ->
                         viewModel.onFavouriteStateUpdate(
-
                             procedure.id,
                             isFavourite,
                         )
@@ -57,11 +57,10 @@ fun HomeScreen(showSnackBar: (String, FavouriteState) -> Unit) {
                             else FavouriteState.REMOVED
                         )
                     },
-                    DigitalSurgeryScreen.Home
+                    DigitalSurgeryScreen.Favourites
                 )
             }
         }
-
         if (showBottomSheet) {
             BottomSheet(
                 onDismissRequest = { showBottomSheet = false },
@@ -75,10 +74,7 @@ fun HomeScreen(showSnackBar: (String, FavouriteState) -> Unit) {
                         if (isFavourite) FavouriteState.ADDED
                         else FavouriteState.REMOVED
                     )
-                    viewModel.updateProcedureItems(
-                        detail.id,
-                        isFavourite
-                    )
+                    showBottomSheet = false
                 },
             )
         }

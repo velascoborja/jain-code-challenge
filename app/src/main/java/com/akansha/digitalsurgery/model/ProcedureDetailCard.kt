@@ -21,4 +21,5 @@ data class ProcedureDetailCard(
     @ColumnInfo val duration: Int = 0,
     @ColumnInfo(name = "creation_Date") val creationDate: String = "",
     @ColumnInfo val phases: List<PhaseDetailCard> = emptyList(),
+    @ColumnInfo var isFavourite: Boolean = false,
 )

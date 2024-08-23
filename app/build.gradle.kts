@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.room)
     kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

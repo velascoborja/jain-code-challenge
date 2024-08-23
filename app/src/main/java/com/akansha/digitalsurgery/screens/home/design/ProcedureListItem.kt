@@ -17,6 +17,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -27,13 +31,15 @@ import com.akansha.digitalsurgery.Constants.IMAGE_WIDTH
 import com.akansha.digitalsurgery.Constants.PHASE_COUNT_LABEL
 import com.akansha.digitalsurgery.Constants.PROCEDURE_ITEM_HEIGHT
 import com.akansha.digitalsurgery.model.ProcedureItem
+import com.akansha.digitalsurgery.screens.home.model.DigitalSurgeryScreen
 import com.akansha.digitalsurgery.ui.theme.DigitalSurgeryTheme.spacings
 
 
 @Composable
 fun ProcedureListItem(
     procedure: ProcedureItem, onItemClick: (String) -> Unit,
-    isFavourite: Boolean = false, onFavouriteStateUpdate: (String, Boolean) -> Unit
+    onFavouriteStateUpdate: (ProcedureItem, Boolean) -> Unit = { _, _ -> run {} },
+    screen: DigitalSurgeryScreen,
 ) {
     Row(
         modifier = Modifier
@@ -68,14 +74,28 @@ fun ProcedureListItem(
                 style = MaterialTheme.typography.bodyMedium
             )
         }
-        IconButton(onClick = { onFavouriteStateUpdate(procedure.id, !isFavourite) }) {
-            Image(
-                imageVector = if (isFavourite) {
-                    Icons.Default.Favorite
-                } else {
-                    Icons.Default.FavoriteBorder
-                }, contentDescription = null
-            )
+        if (screen == DigitalSurgeryScreen.Home) {
+            var isFavourite by remember(procedure) { mutableStateOf(procedure.isFavourite) }
+            IconButton(onClick = {
+                isFavourite = !isFavourite
+                procedure.isFavourite = isFavourite
+                onFavouriteStateUpdate(procedure, isFavourite)
+            }) {
+                Image(
+                    imageVector = if (isFavourite) {
+                        Icons.Default.Favorite
+                    } else {
+                        Icons.Default.FavoriteBorder
+                    }, contentDescription = null
+                )
+            }
+        } else {
+            IconButton(onClick = {
+                procedure.isFavourite = !procedure.isFavourite
+                onFavouriteStateUpdate(procedure, procedure.isFavourite)
+            }) {
+                Image(Icons.Default.Favorite, contentDescription = null)
+            }
         }
     }
 }

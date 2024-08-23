@@ -13,4 +13,10 @@ object Constants {
     const val PHASE_ITEM_HEIGHT = 80
     const val PHASE_ITEM_WIDTH = 250
     const val MINUTES = "Min"
+    const val MORE_OPTIONS = "More Options"
+    const val FAVOURITES_MENU_OPTION = "View Favourites"
+    const val HOME_MENU_OPTION = "View All"
+    const val FAVOURITE_STATE_ADDED = "added to favourites"
+    const val FAVOURITE_STATE_REMOVED = "removed from favourites"
+    const val EMPTY_STRING = ""
 }

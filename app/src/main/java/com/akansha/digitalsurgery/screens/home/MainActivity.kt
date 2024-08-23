@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.akansha.digitalsurgery.screens.home.design.HomeScreen
+import com.akansha.digitalsurgery.screens.home.design.DigitalSurgeryApp
 import com.akansha.digitalsurgery.ui.theme.DigitalSurgeryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            DigitalSurgeryTheme { HomeScreen() }
+            DigitalSurgeryTheme { DigitalSurgeryApp() }
         }
     }
 }
