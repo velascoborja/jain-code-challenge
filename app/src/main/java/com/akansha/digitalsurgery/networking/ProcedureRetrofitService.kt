@@ -8,9 +8,12 @@ import retrofit2.http.Path
 
 interface ProcedureRetrofitService {
 
-    @GET("/api/v3/procedures")
+    @GET(GET_PROCEDURES_ENDPOINT)
     suspend fun getProcedures(): Response<List<Procedure>>
 
-    @GET("/api/v3/procedures/{procedureId}")
+    @GET(GET_PROCEDURE_DETAILS_ENDPOINT)
     suspend fun getProcedureDetails(@Path("procedureId") procedureId: String): Response<ProcedureDetail>
 }
+
+private const val GET_PROCEDURES_ENDPOINT = "/api/v3/procedures"
+private const val GET_PROCEDURE_DETAILS_ENDPOINT = "$GET_PROCEDURES_ENDPOINT/{procedureId}"

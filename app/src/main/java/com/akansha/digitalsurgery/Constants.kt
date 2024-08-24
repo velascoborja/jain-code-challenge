@@ -12,11 +12,17 @@ object Constants {
     const val PHASES_LABEL = "Phases"
     const val PHASE_ITEM_HEIGHT = 80
     const val PHASE_ITEM_WIDTH = 250
-    const val MINUTES = "Min"
+    const val MINUTES = "mins"
     const val MORE_OPTIONS = "More Options"
     const val FAVOURITES_MENU_OPTION = "View Favourites"
     const val HOME_MENU_OPTION = "View All"
     const val FAVOURITE_STATE_ADDED = "added to favourites"
     const val FAVOURITE_STATE_REMOVED = "removed from favourites"
-    const val EMPTY_STRING = ""
+    const val DEFAULT_STRING = ""
+    const val DEFAULT_INT = 0
+    const val DEFAULT_BOOL = false
+    const val PHASE_IMAGE_CONTENT = "Phase Image"
+    const val CARD_IMAGE_CONTENT = "Procedure Image"
+    const val FAV_ICON_CONTENT = "Fav Icon"
+    const val EMPTY_FAV_SCREEN_MESSAGE = "No favourites to display"
 }

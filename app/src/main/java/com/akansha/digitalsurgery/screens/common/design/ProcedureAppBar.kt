@@ -1,4 +1,4 @@
-package com.akansha.digitalsurgery.screens.home.design
+package com.akansha.digitalsurgery.screens.common.design
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -21,8 +21,8 @@ import com.akansha.digitalsurgery.Constants.APP_NAME
 import com.akansha.digitalsurgery.Constants.FAVOURITES_MENU_OPTION
 import com.akansha.digitalsurgery.Constants.HOME_MENU_OPTION
 import com.akansha.digitalsurgery.Constants.MORE_OPTIONS
-import com.akansha.digitalsurgery.screens.home.model.DigitalSurgeryScreen
-import com.akansha.digitalsurgery.screens.home.model.MenuState
+import com.akansha.digitalsurgery.screens.common.model.DigitalSurgeryScreen
+import com.akansha.digitalsurgery.screens.common.model.MenuState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,13 +47,13 @@ fun ProcedureAppBar(navController: NavController, menuState: MenuState) {
                 if (menuState.showHomeOption) {
                     DropdownMenuItem(text = { Text(HOME_MENU_OPTION) }, onClick = {
                         expanded = false
-                        navController.navigate(DigitalSurgeryScreen.Home.name)
+                        navController.navigate(DigitalSurgeryScreen.HOME.name)
                     })
                 }
                 if (menuState.showFavouritesOption) {
                     DropdownMenuItem(text = { Text(FAVOURITES_MENU_OPTION) }, onClick = {
                         expanded = false
-                        navController.navigate(DigitalSurgeryScreen.Favourites.name)
+                        navController.navigate(DigitalSurgeryScreen.FAVOURITES.name)
                     })
                 }
             }

@@ -16,7 +16,7 @@
         android:theme="@style/Theme.DigitalSurgery"
         tools:targetApi="31">
         <activity
-            android:name=".screens.home.MainActivity"
+            android:name=".screens.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.DigitalSurgery">

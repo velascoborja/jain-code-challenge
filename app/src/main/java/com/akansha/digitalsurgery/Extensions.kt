@@ -1,7 +1,6 @@
 package com.akansha.digitalsurgery
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.akansha.digitalsurgery.model.ProcedureDetailCard
 import com.akansha.digitalsurgery.model.ProcedureItem
@@ -14,9 +13,9 @@ fun Long.toMinutes(): Int = (this / SECONDS_IN_ONE_MINUTE).toInt()
 @RequiresApi(Build.VERSION_CODES.O)
 fun String.format(): String {
     val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss[.SSSSSS]")
-    val date: LocalDateTime = LocalDateTime.parse(this, inputFormatter)
+    val inputDate: LocalDateTime = LocalDateTime.parse(this, inputFormatter)
     val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-    return date.format(outputFormatter)
+    return inputDate.format(outputFormatter)
 }
 
 fun List<ProcedureItem>.addFavouritesInfo(favoritesList: List<ProcedureItem>): List<ProcedureItem> {
@@ -28,10 +27,10 @@ fun List<ProcedureItem>.addFavouritesInfo(favoritesList: List<ProcedureItem>): L
 
 fun ProcedureDetailCard.addFavouritesInfo(favoritesList: List<ProcedureItem>): ProcedureDetailCard {
     val favoriteIds = favoritesList.map { it.id }
-    val detail = this.apply {
-        this.isFavourite = favoriteIds.contains(id)
+    val updatedDetail = this.apply {
+        this.isFavourite = favoriteIds.contains(this.id)
     }
-    return detail
+    return updatedDetail
 }
 
 private const val SECONDS_IN_ONE_MINUTE = 60

@@ -1,4 +1,4 @@
-package com.akansha.digitalsurgery.screens.home.design
+package com.akansha.digitalsurgery.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,13 +17,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.akansha.digitalsurgery.Constants.EMPTY_STRING
+import com.akansha.digitalsurgery.Constants.DEFAULT_STRING
 import com.akansha.digitalsurgery.Constants.FAVOURITE_STATE_ADDED
 import com.akansha.digitalsurgery.Constants.FAVOURITE_STATE_REMOVED
-import com.akansha.digitalsurgery.screens.favourites.design.FavouritesScreen
-import com.akansha.digitalsurgery.screens.home.model.DigitalSurgeryScreen
-import com.akansha.digitalsurgery.screens.home.model.FavouriteState
-import com.akansha.digitalsurgery.screens.home.model.MenuState
+import com.akansha.digitalsurgery.screens.favourites.FavouritesScreen
+import com.akansha.digitalsurgery.screens.common.model.DigitalSurgeryScreen
+import com.akansha.digitalsurgery.screens.common.model.FavouriteState
+import com.akansha.digitalsurgery.screens.common.model.MenuState
+import com.akansha.digitalsurgery.screens.home.HomeScreen
+import com.akansha.digitalsurgery.screens.common.design.ProcedureAppBar
 import kotlinx.coroutines.launch
 
 
@@ -31,12 +33,12 @@ import kotlinx.coroutines.launch
 fun DigitalSurgeryApp() {
 
     val navController = rememberNavController()
-    var menuState: MenuState by remember {
-        mutableStateOf(MenuState(showHomeOption = true, showFavouritesOption = true))
-    }
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
-    var showSnackBar by remember { mutableStateOf(false) }
+    var menuState: MenuState by remember {
+        mutableStateOf(MenuState(showHomeOption = false, showFavouritesOption = true))
+    }
+    var showSnackBar: Boolean by remember { mutableStateOf(false) }
     var favouriteState: FavouriteState? by remember { mutableStateOf(null) }
     var procedureName: String? by remember { mutableStateOf(null) }
 
@@ -47,9 +49,10 @@ fun DigitalSurgeryApp() {
                     message = when (favouriteState) {
                         FavouriteState.ADDED -> "$procedureName $FAVOURITE_STATE_ADDED"
                         FavouriteState.REMOVED -> "$procedureName $FAVOURITE_STATE_REMOVED"
-                        else -> EMPTY_STRING
+                        else -> DEFAULT_STRING
                     },
-                    duration = SnackbarDuration.Short
+                    duration = SnackbarDuration.Short,
+                    withDismissAction = true,
                 )
             }
             showSnackBar = false
@@ -62,27 +65,26 @@ fun DigitalSurgeryApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = DigitalSurgeryScreen.Home.name,
+            startDestination = DigitalSurgeryScreen.HOME.name,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(route = DigitalSurgeryScreen.Home.name) {
+            composable(route = DigitalSurgeryScreen.HOME.name) {
                 menuState = MenuState(showHomeOption = false, showFavouritesOption = true)
                 HomeScreen(showSnackBar = { name, state ->
                     showSnackBar = true
-                    favouriteState = state
                     procedureName = name
+                    favouriteState = state
                 })
             }
 
-            composable(route = DigitalSurgeryScreen.Favourites.name) {
+            composable(route = DigitalSurgeryScreen.FAVOURITES.name) {
                 menuState = MenuState(showHomeOption = true, showFavouritesOption = false)
                 FavouritesScreen(showSnackBar = { name, state ->
                     showSnackBar = true
-                    favouriteState = state
                     procedureName = name
+                    favouriteState = state
                 })
             }
-
         }
     }
 }

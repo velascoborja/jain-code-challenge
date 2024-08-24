@@ -1,4 +1,4 @@
-package com.akansha.digitalsurgery.screens.home.design
+package com.akansha.digitalsurgery.screens.common.design
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,18 +27,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.akansha.digitalsurgery.Constants.CARD_IMAGE_CONTENT
+import com.akansha.digitalsurgery.Constants.FAV_ICON_CONTENT
 import com.akansha.digitalsurgery.Constants.IMAGE_WIDTH
 import com.akansha.digitalsurgery.Constants.PHASE_COUNT_LABEL
 import com.akansha.digitalsurgery.Constants.PROCEDURE_ITEM_HEIGHT
 import com.akansha.digitalsurgery.model.ProcedureItem
-import com.akansha.digitalsurgery.screens.home.model.DigitalSurgeryScreen
+import com.akansha.digitalsurgery.screens.common.model.DigitalSurgeryScreen
 import com.akansha.digitalsurgery.ui.theme.DigitalSurgeryTheme.spacings
 
 
 @Composable
 fun ProcedureListItem(
     procedure: ProcedureItem, onItemClick: (String) -> Unit,
-    onFavouriteStateUpdate: (ProcedureItem, Boolean) -> Unit = { _, _ -> run {} },
+    onFavouriteStateUpdate: (ProcedureItem, Boolean) -> Unit,
     screen: DigitalSurgeryScreen,
 ) {
     Row(
@@ -52,7 +54,7 @@ fun ProcedureListItem(
     ) {
         AsyncImage(
             model = procedure.imageUrl,
-            contentDescription = null,
+            contentDescription = CARD_IMAGE_CONTENT,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.width(IMAGE_WIDTH.dp)
         )
@@ -74,28 +76,45 @@ fun ProcedureListItem(
                 style = MaterialTheme.typography.bodyMedium
             )
         }
-        if (screen == DigitalSurgeryScreen.Home) {
-            var isFavourite by remember(procedure) { mutableStateOf(procedure.isFavourite) }
-            IconButton(onClick = {
-                isFavourite = !isFavourite
-                procedure.isFavourite = isFavourite
-                onFavouriteStateUpdate(procedure, isFavourite)
-            }) {
-                Image(
-                    imageVector = if (isFavourite) {
-                        Icons.Default.Favorite
-                    } else {
-                        Icons.Default.FavoriteBorder
-                    }, contentDescription = null
-                )
-            }
-        } else {
-            IconButton(onClick = {
-                procedure.isFavourite = !procedure.isFavourite
-                onFavouriteStateUpdate(procedure, procedure.isFavourite)
-            }) {
-                Image(Icons.Default.Favorite, contentDescription = null)
-            }
+        when (screen) {
+            DigitalSurgeryScreen.HOME -> HomeScreenFavToggle(procedure, onFavouriteStateUpdate)
+            DigitalSurgeryScreen.FAVOURITES -> FavScreenFavToggle(procedure, onFavouriteStateUpdate)
         }
+    }
+}
+
+@Composable
+private fun HomeScreenFavToggle(
+    procedure: ProcedureItem,
+    onFavouriteStateUpdate: (ProcedureItem, Boolean) -> Unit
+) {
+
+    var isFavourite by remember(procedure) { mutableStateOf(procedure.isFavourite) }
+
+    IconButton(onClick = {
+        isFavourite = !isFavourite
+        procedure.isFavourite = isFavourite
+        onFavouriteStateUpdate(procedure, isFavourite)
+    }) {
+        Image(
+            imageVector = if (isFavourite) {
+                Icons.Default.Favorite
+            } else {
+                Icons.Default.FavoriteBorder
+            }, contentDescription = FAV_ICON_CONTENT
+        )
+    }
+}
+
+@Composable
+private fun FavScreenFavToggle(
+    procedure: ProcedureItem,
+    onFavouriteStateUpdate: (ProcedureItem, Boolean) -> Unit
+) {
+    IconButton(onClick = {
+        procedure.isFavourite = !procedure.isFavourite
+        onFavouriteStateUpdate(procedure, procedure.isFavourite)
+    }) {
+        Image(Icons.Default.Favorite, contentDescription = FAV_ICON_CONTENT)
     }
 }

@@ -1,4 +1,4 @@
-package com.akansha.digitalsurgery.screens.home.design
+package com.akansha.digitalsurgery.screens.common.design
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -13,9 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.akansha.digitalsurgery.Constants.IMAGE_WIDTH
+import com.akansha.digitalsurgery.Constants.PHASE_IMAGE_CONTENT
 import com.akansha.digitalsurgery.Constants.PHASE_ITEM_HEIGHT
 import com.akansha.digitalsurgery.Constants.PHASE_ITEM_WIDTH
 import com.akansha.digitalsurgery.model.PhaseDetailCard
@@ -32,7 +34,7 @@ fun PhaseListItem(phase: PhaseDetailCard) {
     ) {
         AsyncImage(
             model = phase.imageUrl,
-            contentDescription = null,
+            contentDescription = PHASE_IMAGE_CONTENT,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.width(IMAGE_WIDTH.dp)
         )
@@ -41,6 +43,8 @@ fun PhaseListItem(phase: PhaseDetailCard) {
             Text(
                 text = phase.name,
                 style = MaterialTheme.typography.titleMedium,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

@@ -1,4 +1,4 @@
-package com.akansha.digitalsurgery.screens.home.design
+package com.akansha.digitalsurgery.screens.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -13,9 +13,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.akansha.digitalsurgery.screens.home.ProcedureViewModel
-import com.akansha.digitalsurgery.screens.home.model.DigitalSurgeryScreen
-import com.akansha.digitalsurgery.screens.home.model.FavouriteState
+import com.akansha.digitalsurgery.Constants.DEFAULT_BOOL
+import com.akansha.digitalsurgery.Constants.DEFAULT_STRING
+import com.akansha.digitalsurgery.screens.common.design.BottomSheet
+import com.akansha.digitalsurgery.screens.common.design.ProcedureListItem
+import com.akansha.digitalsurgery.screens.common.model.DigitalSurgeryScreen
+import com.akansha.digitalsurgery.screens.common.model.FavouriteState
+import com.akansha.digitalsurgery.screens.common.model.getFavouriteState
+import com.akansha.digitalsurgery.screens.viewmodel.ProcedureViewModel
 import com.akansha.digitalsurgery.ui.theme.Spacings
 
 
@@ -25,8 +30,8 @@ fun HomeScreen(showSnackBar: (String, FavouriteState) -> Unit) {
         val viewModel = hiltViewModel<ProcedureViewModel>()
         val procedures = viewModel.procedureLiveData.observeAsState(emptyList())
         val favorites = viewModel.favouritesLiveData.observeAsState()
-        var showBottomSheet by remember { mutableStateOf(false) }
-        var clickedItemId by remember { mutableStateOf("") }
+        var showBottomSheet by remember { mutableStateOf(DEFAULT_BOOL) }
+        var clickedItemId by remember { mutableStateOf(DEFAULT_STRING) }
 
         LaunchedEffect(key1 = Unit) {
             viewModel.getProcedures()
@@ -39,25 +44,17 @@ fun HomeScreen(showSnackBar: (String, FavouriteState) -> Unit) {
         }
 
         LazyColumn(modifier = Modifier.padding(Spacings.s)) {
-            items(procedures.value, key = { it.id }) { item ->
+            items(procedures.value) { item ->
                 ProcedureListItem(
                     procedure = item, onItemClick = {
                         clickedItemId = it
                         showBottomSheet = true
                     },
                     onFavouriteStateUpdate = { procedure, isFavourite ->
-                        viewModel.onFavouriteStateUpdate(
-
-                            procedure.id,
-                            isFavourite,
-                        )
-                        showSnackBar(
-                            procedure.title,
-                            if (isFavourite) FavouriteState.ADDED
-                            else FavouriteState.REMOVED
-                        )
+                        viewModel.onFavouriteStateUpdate(procedure.id, isFavourite)
+                        showSnackBar(procedure.title, getFavouriteState(isFavourite))
                     },
-                    DigitalSurgeryScreen.Home
+                    DigitalSurgeryScreen.HOME
                 )
             }
         }
@@ -66,19 +63,9 @@ fun HomeScreen(showSnackBar: (String, FavouriteState) -> Unit) {
             BottomSheet(
                 onDismissRequest = { showBottomSheet = false },
                 onFavouriteStateUpdate = { detail, isFavourite ->
-                    viewModel.onFavouriteStateUpdate(
-                        detail.id,
-                        isFavourite,
-                    )
-                    showSnackBar(
-                        detail.title,
-                        if (isFavourite) FavouriteState.ADDED
-                        else FavouriteState.REMOVED
-                    )
-                    viewModel.updateProcedureItems(
-                        detail.id,
-                        isFavourite
-                    )
+                    viewModel.onFavouriteStateUpdate(detail.id, isFavourite)
+                    showSnackBar(detail.title, getFavouriteState(isFavourite))
+                    viewModel.updateProcedureItems(detail.id, isFavourite)
                 },
             )
         }

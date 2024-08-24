@@ -1,4 +1,4 @@
-package com.akansha.digitalsurgery.screens.home.design
+package com.akansha.digitalsurgery.screens.common.design
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -26,9 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.akansha.digitalsurgery.Constants.CARD_IMAGE_CONTENT
 import com.akansha.digitalsurgery.Constants.CARD_IMAGE_HEIGHT
 import com.akansha.digitalsurgery.Constants.CREATION_DATE_LABEL
 import com.akansha.digitalsurgery.Constants.DURATION_LABEL
+import com.akansha.digitalsurgery.Constants.FAV_ICON_CONTENT
 import com.akansha.digitalsurgery.Constants.MINUTES
 import com.akansha.digitalsurgery.Constants.PHASES_LABEL
 import com.akansha.digitalsurgery.model.ProcedureDetailCard
@@ -37,7 +39,7 @@ import com.akansha.digitalsurgery.ui.theme.DigitalSurgeryTheme.spacings
 @Composable
 fun ProcedureDetailView(
     detail: ProcedureDetailCard,
-    onFavouriteStateUpdate: (ProcedureDetailCard, Boolean) -> Unit
+    onFavouriteStateUpdate: (ProcedureDetailCard, Boolean) -> Unit,
 ) {
 
     var isFavourite by remember(detail.id) { mutableStateOf(detail.isFavourite) }
@@ -46,7 +48,7 @@ fun ProcedureDetailView(
         Box(contentAlignment = Alignment.Center) {
             AsyncImage(
                 model = detail.cardImageUrl,
-                contentDescription = null,
+                contentDescription = CARD_IMAGE_CONTENT,
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .height(CARD_IMAGE_HEIGHT.dp)
@@ -54,13 +56,12 @@ fun ProcedureDetailView(
             )
         }
         Spacer(modifier = Modifier.height(spacings.l))
-        Row {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = detail.title,
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.weight(1f)
             )
-
             IconButton(onClick = {
                 isFavourite = !isFavourite
                 detail.isFavourite = isFavourite
@@ -71,7 +72,7 @@ fun ProcedureDetailView(
                         Icons.Default.Favorite
                     } else {
                         Icons.Default.FavoriteBorder
-                    }, contentDescription = null
+                    }, contentDescription = FAV_ICON_CONTENT
                 )
             }
         }

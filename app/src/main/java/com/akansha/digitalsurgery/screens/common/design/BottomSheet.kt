@@ -1,4 +1,4 @@
-package com.akansha.digitalsurgery.screens.home.design
+package com.akansha.digitalsurgery.screens.common.design
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,13 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.akansha.digitalsurgery.model.ProcedureDetailCard
-import com.akansha.digitalsurgery.screens.home.ProcedureViewModel
+import com.akansha.digitalsurgery.screens.viewmodel.ProcedureViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheet(
     onDismissRequest: () -> Unit,
-    onFavouriteStateUpdate: (ProcedureDetailCard, Boolean) -> Unit
+    onFavouriteStateUpdate: (ProcedureDetailCard, Boolean) -> Unit,
 ) {
     val viewModel = hiltViewModel<ProcedureViewModel>()
     val procedureDetail: ProcedureDetailCard? by viewModel.procedureDetailLiveData.observeAsState()

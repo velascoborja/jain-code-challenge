@@ -1,4 +1,4 @@
-package com.akansha.digitalsurgery.screens.home.model
+package com.akansha.digitalsurgery.screens.common.model
 
 data class MenuState(
     val showHomeOption: Boolean,

@@ -29,11 +29,11 @@ fun ProcedureDetail.map(): ProcedureDetailCard {
         title = title,
         duration = duration.toMinutes(),
         creationDate = creationDate.format(),
-        phases = phases.map {
+        phases = phases.map { phase ->
             PhaseDetailCard(
                 procedureId = id,
-                imageUrl = it.image.url,
-                name = it.name
+                imageUrl = phase.image.url,
+                name = phase.name
             )
         }
     )

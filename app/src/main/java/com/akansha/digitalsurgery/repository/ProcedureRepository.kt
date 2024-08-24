@@ -4,7 +4,9 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
+import com.akansha.digitalsurgery.datastorage.ProcedureDao
 import com.akansha.digitalsurgery.model.ProcedureDetailResult
+import com.akansha.digitalsurgery.model.ProcedureItem
 import com.akansha.digitalsurgery.model.ProcedureListResult
 import com.akansha.digitalsurgery.networking.ProcedureRetrofitService
 import com.akansha.digitalsurgery.repository.mapper.map
@@ -14,14 +16,19 @@ import javax.inject.Inject
 
 class ProcedureRepository @Inject constructor(
     private val service: ProcedureRetrofitService,
+    private val dao: ProcedureDao,
 ) : IProcedureRepository {
 
-    private val procedureLiveData by lazy {
+    private val proceduresLiveData by lazy {
         MutableLiveData<ProcedureListResult>()
     }
 
-    private val procedureDetailLiveData by lazy {
+    private val procedureDetailsLiveData by lazy {
         MutableLiveData<ProcedureDetailResult>()
+    }
+
+    private val favouritesLiveData by lazy {
+        MutableLiveData<ProcedureListResult>()
     }
 
     override suspend fun getProcedures(): MutableLiveData<ProcedureListResult> {
@@ -29,43 +36,76 @@ class ProcedureRepository @Inject constructor(
         return withContext(Dispatchers.IO) {
             try {
                 val response = service.getProcedures()
-
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        procedureLiveData.postValue(ProcedureListResult.Success(it.map()))
-                    } ?: procedureLiveData.postValue(ProcedureListResult.Failure)
+                        proceduresLiveData.postValue(ProcedureListResult.Success(it.map()))
+                    } ?: proceduresLiveData.postValue(ProcedureListResult.Failure)
                 } else {
-                    procedureLiveData.postValue(ProcedureListResult.Failure)
+                    proceduresLiveData.postValue(ProcedureListResult.Failure)
                 }
             } catch (e: Exception) {
                 Log.e("Error", e.message.toString())
-                procedureLiveData.postValue(ProcedureListResult.Failure)
+                proceduresLiveData.postValue(ProcedureListResult.Failure)
             }
 
-            return@withContext procedureLiveData
+            return@withContext proceduresLiveData
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getProcedureDetails(procedureId: String): MutableLiveData<ProcedureDetailResult> {
+
         return withContext(Dispatchers.IO) {
             try {
-
                 val response = service.getProcedureDetails(procedureId)
-
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        procedureDetailLiveData.postValue(ProcedureDetailResult.Success(it.map()))
-                    } ?: procedureDetailLiveData.postValue(ProcedureDetailResult.Failure)
+                        procedureDetailsLiveData.postValue(ProcedureDetailResult.Success(it.map()))
+                    } ?: procedureDetailsLiveData.postValue(ProcedureDetailResult.Failure)
                 } else {
-                    procedureDetailLiveData.postValue(ProcedureDetailResult.Failure)
+                    procedureDetailsLiveData.postValue(ProcedureDetailResult.Failure)
                 }
             } catch (e: Exception) {
                 Log.e("Error", e.message.toString())
-                procedureDetailLiveData.postValue(ProcedureDetailResult.Failure)
+                procedureDetailsLiveData.postValue(ProcedureDetailResult.Failure)
             }
 
-            return@withContext procedureDetailLiveData
+            return@withContext procedureDetailsLiveData
+        }
+    }
+
+    override suspend fun getFavouriteProcedures(): MutableLiveData<ProcedureListResult> {
+
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = dao.getFavouriteProcedures()
+                favouritesLiveData.postValue(ProcedureListResult.Success(response))
+            } catch (e: Exception) {
+                Log.e("Error", e.message.toString())
+                favouritesLiveData.postValue(ProcedureListResult.Failure)
+            }
+
+            return@withContext favouritesLiveData
+        }
+    }
+
+    override suspend fun saveFavouriteProcedure(procedure: ProcedureItem) {
+        withContext(Dispatchers.IO) {
+            try {
+                dao.saveAsFavourite(procedure)
+            } catch (e: Exception) {
+                Log.e("Error", e.message.toString())
+            }
+        }
+    }
+
+    override suspend fun removeFavouriteProcedure(procedure: ProcedureItem) {
+        withContext(Dispatchers.IO) {
+            try {
+                dao.removeAsFavourite(procedure)
+            } catch (e: Exception) {
+                Log.e("Error", e.message.toString())
+            }
         }
     }
 }

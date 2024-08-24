@@ -1,4 +1,4 @@
-package com.akansha.digitalsurgery.screens.home
+package com.akansha.digitalsurgery.screens.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,9 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProcedureViewModel @Inject constructor(
     private val repository: IProcedureRepository,
-    private val dao: ProcedureDao,
-) :
-    ViewModel() {
+) : ViewModel() {
 
     private val _procedureLiveData = MutableLiveData<List<ProcedureItem>>()
     val procedureLiveData: LiveData<List<ProcedureItem>> get() = _procedureLiveData
@@ -34,11 +32,11 @@ class ProcedureViewModel @Inject constructor(
     fun getProcedures() {
         viewModelScope.launch {
             getFavourites()
-            val result = repository.getProcedures().value
-            _procedureLiveData.value = result?.let {
-                when (result) {
+            val procedureListResult = repository.getProcedures().value
+            _procedureLiveData.value = procedureListResult?.let {
+                when (procedureListResult) {
                     is ProcedureListResult.Success -> favouritesLiveData.value?.let { favorites ->
-                        result.procedures.addFavouritesInfo(favorites)
+                        procedureListResult.procedures.addFavouritesInfo(favorites)
                     }
 
                     is ProcedureListResult.Failure -> emptyList()
@@ -49,11 +47,11 @@ class ProcedureViewModel @Inject constructor(
 
     fun getProcedureDetails(procedureId: String) {
         viewModelScope.launch {
-            val result = repository.getProcedureDetails(procedureId).value
-            _procedureDetailLiveData.value = result?.let {
-                when (result) {
+            val procedureDetailResult = repository.getProcedureDetails(procedureId).value
+            _procedureDetailLiveData.value = procedureDetailResult?.let {
+                when (procedureDetailResult) {
                     is ProcedureDetailResult.Success -> favouritesLiveData.value?.let { favorites ->
-                        result.details.addFavouritesInfo(favorites)
+                        procedureDetailResult.details.addFavouritesInfo(favorites)
                     }
 
                     is ProcedureDetailResult.Failure -> ProcedureDetailCard()
@@ -64,16 +62,21 @@ class ProcedureViewModel @Inject constructor(
 
     fun getFavourites() {
         viewModelScope.launch {
-            _favouritesLiveData.value = dao.getFavouriteProcedures()
+            val procedureListResult = repository.getFavouriteProcedures().value
+            _favouritesLiveData.value = procedureListResult?.let {
+                when (procedureListResult) {
+                    is ProcedureListResult.Success -> procedureListResult.procedures
+                    is ProcedureListResult.Failure -> emptyList()
+                }
+            }
         }
     }
 
     fun onFavouriteStateUpdate(procedureId: String, isFavourite: Boolean) {
         viewModelScope.launch {
             val procedure = _procedureLiveData.value?.first { it.id == procedureId }
-                ?: _favouritesLiveData.value?.first {
-                    it.id == procedureId
-                }
+                ?: _favouritesLiveData.value?.first { it.id == procedureId }
+
             procedure?.let {
                 if (isFavourite) {
                     addToFavourites(it)
@@ -85,7 +88,8 @@ class ProcedureViewModel @Inject constructor(
     }
 
     private suspend fun addToFavourites(procedure: ProcedureItem) {
-        dao.saveAsFavourite(procedure)
+        repository.saveFavouriteProcedure(procedure)
+
         val updatedFavourites = _favouritesLiveData.value.orEmpty().toMutableList()
         if (!updatedFavourites.contains(procedure)) {
             updatedFavourites.add(procedure)
@@ -94,21 +98,23 @@ class ProcedureViewModel @Inject constructor(
     }
 
     private suspend fun removeFromFavourites(procedure: ProcedureItem) {
-        dao.removeAsFavourite(procedure)
-        _favouritesLiveData.value =
-            _favouritesLiveData.value?.filterNot { it == procedure }?.toMutableList()
+        repository.removeFavouriteProcedure(procedure)
+
+        val updatedFavourites =
+            _favouritesLiveData.value?.filterNot { it == procedure }.orEmpty().toMutableList()
+        _favouritesLiveData.value = updatedFavourites
     }
 
     fun updateProcedureItems(procedureId: String, isFavourite: Boolean) {
-        _procedureLiveData.value?.let { currentList ->
-            val updatedList = currentList.map { procedure ->
+        _procedureLiveData.value?.let { currentProcedureList ->
+            val updatedProcedureList = currentProcedureList.map { procedure ->
                 if (procedure.id == procedureId) {
                     procedure.copy(isFavourite = isFavourite)
                 } else {
                     procedure
                 }
             }
-            _procedureLiveData.value = updatedList
+            _procedureLiveData.value = updatedProcedureList
         }
     }
 }
