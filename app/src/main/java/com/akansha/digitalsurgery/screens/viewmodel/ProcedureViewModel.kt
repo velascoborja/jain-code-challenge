@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.akansha.digitalsurgery.addFavouritesInfo
-import com.akansha.digitalsurgery.datastorage.ProcedureDao
 import com.akansha.digitalsurgery.model.ProcedureDetailCard
 import com.akansha.digitalsurgery.model.ProcedureDetailResult
 import com.akansha.digitalsurgery.model.ProcedureItem
@@ -37,7 +36,7 @@ class ProcedureViewModel @Inject constructor(
                 when (procedureListResult) {
                     is ProcedureListResult.Success -> favouritesLiveData.value?.let { favorites ->
                         procedureListResult.procedures.addFavouritesInfo(favorites)
-                    }
+                    } ?: procedureListResult.procedures
 
                     is ProcedureListResult.Failure -> emptyList()
                 }
@@ -52,7 +51,7 @@ class ProcedureViewModel @Inject constructor(
                 when (procedureDetailResult) {
                     is ProcedureDetailResult.Success -> favouritesLiveData.value?.let { favorites ->
                         procedureDetailResult.details.addFavouritesInfo(favorites)
-                    }
+                    } ?: procedureDetailResult.details
 
                     is ProcedureDetailResult.Failure -> ProcedureDetailCard()
                 }

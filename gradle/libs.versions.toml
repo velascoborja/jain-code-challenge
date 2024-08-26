@@ -16,6 +16,9 @@ coil = "2.7.0"
 navigation = "2.7.7"
 hiltNavigation = "1.2.0"
 roomVersion = "2.6.1"
+coroutinesTest = "1.8.1"
+coreTesting = "2.2.0"
+mockk = "1.12.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,6 +49,9 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 room = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
+core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "coreTesting" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
